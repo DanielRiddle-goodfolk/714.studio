@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" width="1600" height="1100" role="img" aria-label="Hands Sorting Botanicals placeholder">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fefcf7"/><stop offset="1" stop-color="#eae5df"/>
+  </linearGradient>
+  <filter id="b"><feGaussianBlur stdDeviation="157"/></filter>
+</defs>
+<rect width="1600" height="1100" fill="url(#g)"/>
+<g filter="url(#b)" opacity=".5"><circle cx="1149" cy="535" r="374" fill="#bbcec2" opacity=".55"/><circle cx="1312" cy="937" r="493" fill="#9fb5a8" opacity=".55"/><circle cx="1242" cy="803" r="390" fill="#b8b2a6" opacity=".55"/><circle cx="1271" cy="626" r="481" fill="#eae5df" opacity=".55"/><circle cx="1346" cy="450" r="438" fill="#bbcec2" opacity=".55"/></g>
+<defs><pattern id="t" width="20" height="6" patternUnits="userSpaceOnUse"><path d="M0 0v6" stroke="#8c8a82" stroke-width="1"/></pattern></defs><rect x="22" y="22" width="1556" height="1056" fill="none" stroke="#8c8a82" stroke-width="1"/><rect x="22" y="22" width="1556" height="6" fill="url(#t)"/><rect x="22" y="1072" width="1556" height="6" fill="url(#t)"/>
+<text x="800.0" y="517.0" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-size="66" fill="#1a1a1a">Hands Sorting Botanicals</text>
+<text x="800.0" y="573.1" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-style="italic" font-size="37" fill="#404040">walnut worktable · editorial study</text>
+<text x="800.0" y="635.8" text-anchor="middle" font-family="Source Sans 3, Gill Sans, Segoe UI, sans-serif" font-size="26" letter-spacing="2" fill="#8c8a82">PLACEHOLDER</text>
+</svg>
