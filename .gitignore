@@ -10,3 +10,16 @@ studio714-preview.html
 
 # Packaged copies
 *.zip
+
+# Generated interior pages — built by build/content.py at deploy time.
+# index.html is NOT ignored: it is source, not output.
+/about/
+/apothecary-consultation/
+/book/
+/classes-events/
+/contact/
+/first-visit/
+/membership/
+/mind-the-truth/
+/start-here/
+/wellness/

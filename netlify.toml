@@ -1,16 +1,21 @@
 # Studio 7:14 — Netlify configuration
 #
-# This site is plain static HTML. There is deliberately no build step: the pages
-# in the repo are the pages that ship. Deploys are seconds rather than minutes,
-# and there is no build that can fail and block a merge for reasons unrelated to
-# the change being reviewed.
+# The 16 interior pages are generated from build/content.py, so they are built
+# here rather than committed. That keeps the repo free of 200 KB of near-identical
+# HTML and, more usefully, makes a pull request show the change to the copy itself
+# instead of the same edit repeated across sixteen files.
 #
-# The Python scripts in build/ regenerate the pages, but they are run locally and
-# their output is committed. Netlify never runs them.
+# index.html is committed — it descends from the original Manus DOM capture, which
+# is a local artefact, so it is source rather than output.
+#
+# The build is a few seconds of Python with no dependencies.
 
 [build]
   publish = "."
-  command = ""
+  command = "python3 build/content.py && python3 build/inject.py"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
 
 # Pretty URLs: /wellness/pemf/ rather than /wellness/pemf/index.html
 [build.processing]
