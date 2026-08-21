@@ -1,0 +1,363 @@
+/* ---------------------------------------------------------------------------
+   Studio 7:14 — additions layered on top of the exported Manus stylesheet.
+
+   Kept in a separate file on purpose: studio714.css is the compiled artefact
+   from the Manus build and should stay byte-for-byte what it was, so it can be
+   diffed or replaced wholesale if the real source ever turns up.
+
+   Everything here covers behaviour that used to come from React components
+   (the Radix sheet that drove the mobile menu) or from the build pipeline.
+--------------------------------------------------------------------------- */
+
+/* --- Mobile menu -----------------------------------------------------------
+   .mobile-menu-panel in the exported CSS is all !important overrides that sat
+   on top of Radix's own positioning classes. Radix is gone, so the panel needs
+   its own position, transform and transition. */
+
+.mobile-menu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgb(0 0 0 / 38%);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .32s var(--s714-ease-out), visibility .32s;
+}
+
+.mobile-menu-panel {
+  position: fixed;
+  z-index: 90;
+  inset-block: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  transform: translateX(101%);
+  transition: transform .36s var(--s714-ease-in-out);
+}
+
+body.menu-open .mobile-menu-scrim { opacity: 1; visibility: visible; }
+body.menu-open .mobile-menu-panel { transform: translateX(0); }
+body.menu-open { overflow: hidden; }
+
+.mobile-menu-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.35rem 1.5rem 1.15rem;
+}
+
+.mobile-navigation { padding-top: .5rem; }
+.mobile-nav-row > a { display: flex; }
+.mobile-book { text-align: center; justify-content: center; }
+
+/* The panel is inert until opened; keep it off the tab order when closed. */
+.mobile-menu-panel[hidden] { display: none; }
+
+@media (min-width: 900px) {
+  .mobile-menu-scrim,
+  .mobile-menu-panel { display: none !important; }
+}
+
+/* --- Skip link -------------------------------------------------------------
+   Visible only on keyboard focus. The export had it styled but the rule that
+   parked it offscreen lived in a layer that did not survive. */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  padding: .75rem 1.15rem;
+  background: var(--s714-ink);
+  color: var(--s714-paper-bright);
+  font-family: var(--s714-font-utility);
+  font-size: .8rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+}
+
+/* --- Editorial helpers used by the interior pages -------------------------- */
+
+.marginal-note {
+  border-left: 3px solid var(--s714-apple);
+  margin-block: 1.75rem;
+  padding: .9rem 0 .9rem 1.15rem;
+  max-width: var(--s714-reading);
+  color: var(--s714-charcoal);
+  font-family: var(--s714-font-utility);
+  font-size: .88rem;
+  line-height: 1.6;
+}
+
+.marginal-note strong {
+  color: var(--s714-apple);
+  letter-spacing: .08em;
+}
+
+.specimen-signals ul {
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--s714-ink);
+}
+
+.specimen-signals li {
+  border-bottom: 1px solid color-mix(in srgb, var(--s714-ink) 22%, transparent);
+  padding: .95rem 0;
+  font-family: var(--s714-font-display);
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+}
+
+.modality-essay p { max-width: var(--s714-reading); }
+.modality-essay p + p { margin-top: 1.15rem; }
+
+.detail-booking {
+  border: 1px solid var(--s714-ink);
+  background: var(--s714-paper-bright);
+  padding: clamp(1.75rem, 4vw, 3rem);
+}
+
+.detail-booking p { max-width: var(--s714-reading); color: var(--s714-charcoal); }
+.detail-booking .opening-actions { margin-top: 1.5rem; }
+
+.chamber-modality-grid {
+  border-top: 1px solid color-mix(in srgb, var(--s714-ink) 22%, transparent);
+  padding-block: 1rem;
+}
+
+.chamber-modality-grid p { margin: .3rem 0 0; color: var(--s714-charcoal); font-size: .92rem; }
+
+.foundation-plates,
+.mind-for-index,
+.contact-directory {
+  display: grid;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+}
+
+.consultation-format-steps {
+  border-top: 1px solid color-mix(in srgb, var(--s714-ink) 22%, transparent);
+  padding-block: 1.15rem;
+}
+
+.consultation-format-steps p { margin: .35rem 0 0; max-width: 38rem; color: var(--s714-charcoal); }
+
+.event-type-index {
+  border-top: 1px solid var(--s714-ink);
+  padding-block: 1.25rem;
+}
+
+.event-type-index p { margin: .4rem 0 0; max-width: 42rem; color: var(--s714-charcoal); }
+
+.mind-notice p {
+  border: 1px solid color-mix(in srgb, var(--s714-ink) 30%, transparent);
+  padding: 1.25rem;
+  max-width: var(--s714-reading);
+  color: var(--s714-charcoal);
+  font-family: var(--s714-font-utility);
+  font-size: .88rem;
+}
+
+/* --- Mint header -----------------------------------------------------------
+   The exported header has two states — a translucent resting state and an
+   .is-scrolled state with blur and a hairline shadow. Both need to be mint or
+   the bar changes colour the moment you scroll. Alpha is kept so the blur still
+   reads as glass over whatever passes beneath it. */
+
+.site-header { background: rgb(187 206 194 / 96%) !important; }
+
+.site-header.is-scrolled {
+  background: rgb(187 206 194 / 97%) !important;
+  box-shadow: 0 1px rgb(0 0 0 / 12%);
+}
+
+/* The tick rule sits on mint now; darken it slightly so it doesn't disappear. */
+.site-header .tick-rule {
+  background-image: repeating-linear-gradient(90deg,
+    transparent 0 8px, rgb(0 0 0 / 42%) 8px 9px, transparent 9px 17px);
+}
+
+/* --- Mint hero -------------------------------------------------------------
+   The home opening in mint rather than paper. Kept as a modifier class so the
+   exported stylesheet stays untouched and this is one word to undo. */
+
+.home-opening.is-mint { background: var(--s714-mint); }
+
+/* The root engraving is a charcoal line drawing sitting behind the copy; on
+   mint it needs to sit back further or it competes with the headline. */
+.home-opening.is-mint .opening-root img { opacity: .5; mix-blend-mode: multiply; }
+
+/* --- Combined doors index --------------------------------------------------
+   One vertical list holding both GoodFolk brands and individual modalities.
+   Built on the same rhythm as .start-pathway: a hairline row that inks itself
+   mint on hover, so the two indexes on the site feel like one system. */
+
+.door-index { border-top: 1px solid var(--s714-ink); }
+
+.door-row {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 15rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1.5rem;
+  min-height: 104px;
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--s714-ink);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color .18s var(--s714-ease-out),
+              padding-inline .18s var(--s714-ease-out);
+}
+
+.door-row:hover { background: var(--s714-mint); padding-inline: .8rem; }
+
+.door-number {
+  color: var(--s714-apple);
+  font-family: var(--s714-font-utility);
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+}
+
+/* Logos are optional per row. --door-logo-scale lets an individual wordmark be
+   nudged when it sits optically small or large next to the others; real logos
+   vary far more in proportion than placeholder ones do. */
+.door-logo {
+  width: auto;
+  max-width: 100%;
+  max-height: calc(64px * var(--door-logo-scale, 1));
+  object-fit: contain;
+  object-position: left center;
+}
+
+/* Modalities have no wordmark, so their name is set instead — same slot, same
+   optical weight as a logo. */
+.door-name {
+  font-family: var(--s714-font-display);
+  font-size: clamp(1.4rem, 2.6vw, 1.95rem);
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.door-copy { display: flex; flex-direction: column; gap: .2rem; }
+
+.door-copy strong {
+  font-family: var(--s714-font-utility);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--s714-charcoal);
+}
+
+.door-copy > span {
+  max-width: 40rem;
+  color: var(--s714-charcoal);
+  font-size: .855rem;
+  line-height: 1.55;
+}
+
+.door-go { color: var(--s714-ink); display: grid; place-items: center; }
+
+@media (max-width: 860px) {
+  .door-row {
+    grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+    gap: .9rem 1rem;
+    padding-block: 1.35rem;
+  }
+  /* logo/name keeps the first content column; copy drops beneath it */
+  .door-mark { grid-column: 2; }
+  .door-go   { grid-column: 3; grid-row: 1; }
+  .door-copy { grid-column: 2 / 4; }
+  .door-logo { max-height: calc(50px * var(--door-logo-scale, 1)); }
+}
+
+/* --- Action buttons --------------------------------------------------------
+   The exported buttons are tight: .72rem/1.1rem padding on a 44px box, sitting
+   in a row with only .8rem of gap and no separation from the paragraph above.
+
+   Scoped to .action-link deliberately — .book-button shares the exported rule,
+   and growing that one would push the whole site header taller. */
+
+.action-link {
+  min-height: 52px !important;
+  padding: 1rem 1.75rem !important;
+  gap: .72rem !important;
+}
+
+.opening-actions {
+  gap: 1.15rem 1.6rem !important;
+  margin-top: 2.25rem;
+}
+
+/* Give the underlined text links a real tap target and keep them off the
+   button edges when the two sit side by side. */
+.opening-actions .editorial-link {
+  padding-block: .5rem;
+  padding-bottom: .55rem;
+}
+
+/* Standalone editorial links following body copy need their own breathing room. */
+p + .editorial-link,
+.section-intro-copy + .editorial-link { margin-top: 1.6rem; }
+
+@media (max-width: 640px) {
+  /* Stack rather than wrap awkwardly, and let each button own its width. */
+  .opening-actions { gap: .9rem 1.2rem; }
+  .action-link { width: 100%; }
+}
+
+/* --- Google reviews embed slot --------------------------------------------
+   Placeholder for the reviews plugin. Sized so the surrounding layout is
+   honest about how much room the real embed will take. */
+
+.reviews-section {
+  border-bottom: 1px solid var(--s714-ink);
+  padding-block: var(--s714-section);
+}
+
+.reviews-head { max-width: 46rem; margin-bottom: 2.5rem; }
+.reviews-head h2 { margin: 1rem 0 .85rem; }
+.reviews-head p { max-width: 39rem; color: var(--s714-charcoal); margin: 0; }
+
+/* Full-bleed within the editorial column — a review wall needs the width. */
+.reviews-embed {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: .6rem;
+  min-height: 340px;
+  margin-bottom: 2rem;
+  padding: clamp(1.75rem, 4vw, 3.5rem);
+  border: 1px dashed color-mix(in srgb, var(--s714-ink) 42%, transparent);
+  background: var(--s714-paper-bright);
+  text-align: center;
+}
+
+.reviews-embed .utility-label { color: var(--s714-apple); margin: 0; }
+
+.reviews-embed-note {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--s714-rule);
+  font-family: var(--s714-font-utility);
+  font-size: .84rem;
+  line-height: 1.65;
+  letter-spacing: .02em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu-panel,
+  .mobile-menu-scrim { transition: none; }
+}
