@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1500" width="1200" height="1500" role="img" aria-label="Apothecary Workroom placeholder">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fefcf7"/><stop offset="1" stop-color="#eae5df"/>
+  </linearGradient>
+  <filter id="b"><feGaussianBlur stdDeviation="171"/></filter>
+</defs>
+<rect width="1200" height="1500" fill="url(#g)"/>
+<g filter="url(#b)" opacity=".5"><circle cx="143" cy="982" r="327" fill="#bbcec2" opacity=".55"/><circle cx="269" cy="659" r="405" fill="#9fb5a8" opacity=".55"/><circle cx="842" cy="1313" r="465" fill="#b8b2a6" opacity=".55"/><circle cx="17" cy="763" r="364" fill="#eae5df" opacity=".55"/><circle cx="920" cy="1094" r="383" fill="#bbcec2" opacity=".55"/></g>
+<defs><pattern id="t" width="20" height="6" patternUnits="userSpaceOnUse"><path d="M0 0v6" stroke="#8c8a82" stroke-width="1"/></pattern></defs><rect x="22" y="22" width="1156" height="1456" fill="none" stroke="#8c8a82" stroke-width="1"/><rect x="22" y="22" width="1156" height="6" fill="url(#t)"/><rect x="22" y="1472" width="1156" height="6" fill="url(#t)"/>
+<text x="600.0" y="725.0" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-size="50" fill="#1a1a1a">Apothecary Workroom</text>
+<text x="600.0" y="767.5" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-style="italic" font-size="28" fill="#404040">herbs · amber glass · botanical notes</text>
+<text x="600.0" y="815.0" text-anchor="middle" font-family="Source Sans 3, Gill Sans, Segoe UI, sans-serif" font-size="20" letter-spacing="2" fill="#8c8a82">PLACEHOLDER</text>
+</svg>

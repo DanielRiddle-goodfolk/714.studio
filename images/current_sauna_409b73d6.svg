@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" width="1400" height="1000" role="img" aria-label="Far Infrared Sauna placeholder">
+<defs>
+  <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#fefcf7"/><stop offset="1" stop-color="#eae5df"/>
+  </linearGradient>
+  <filter id="b"><feGaussianBlur stdDeviation="142"/></filter>
+</defs>
+<rect width="1400" height="1000" fill="url(#g)"/>
+<g filter="url(#b)" opacity=".5"><circle cx="915" cy="342" r="353" fill="#bbcec2" opacity=".55"/><circle cx="429" cy="596" r="417" fill="#9fb5a8" opacity=".55"/><circle cx="1170" cy="612" r="441" fill="#b8b2a6" opacity=".55"/><circle cx="952" cy="87" r="496" fill="#eae5df" opacity=".55"/><circle cx="790" cy="795" r="307" fill="#bbcec2" opacity=".55"/></g>
+<defs><pattern id="t" width="20" height="6" patternUnits="userSpaceOnUse"><path d="M0 0v6" stroke="#8c8a82" stroke-width="1"/></pattern></defs><rect x="22" y="22" width="1356" height="956" fill="none" stroke="#8c8a82" stroke-width="1"/><rect x="22" y="22" width="1356" height="6" fill="url(#t)"/><rect x="22" y="972" width="1356" height="6" fill="url(#t)"/>
+<text x="700.0" y="471.0" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-size="58" fill="#1a1a1a">Far Infrared Sauna</text>
+<text x="700.0" y="520.3" text-anchor="middle" font-family="Cormorant Garamond, Iowan Old Style, Baskerville, Georgia, serif" font-style="italic" font-size="32" fill="#404040">private restorative suite</text>
+<text x="700.0" y="575.4" text-anchor="middle" font-family="Source Sans 3, Gill Sans, Segoe UI, sans-serif" font-size="23" letter-spacing="2" fill="#8c8a82">PLACEHOLDER</text>
+</svg>
