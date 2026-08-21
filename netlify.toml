@@ -1,0 +1,90 @@
+# Studio 7:14 — Netlify configuration
+#
+# This site is plain static HTML. There is deliberately no build step: the pages
+# in the repo are the pages that ship. Deploys are seconds rather than minutes,
+# and there is no build that can fail and block a merge for reasons unrelated to
+# the change being reviewed.
+#
+# The Python scripts in build/ regenerate the pages, but they are run locally and
+# their output is committed. Netlify never runs them.
+
+[build]
+  publish = "."
+  command = ""
+
+# Pretty URLs: /wellness/pemf/ rather than /wellness/pemf/index.html
+[build.processing]
+  skip_processing = false
+
+# Deploy previews for every pull request — this is the review mechanism.
+[context.deploy-preview]
+  publish = "."
+
+[context.production]
+  publish = "."
+
+# ---------------------------------------------------------------- headers
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+
+# Fingerprinted-by-content assets can be cached hard; HTML must not be, or
+# visitors keep seeing the previous deploy.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# ---------------------------------------------------------------- redirects
+
+# The old Squarespace paths, so existing links and search results survive the
+# cutover. Add to this list as more old URLs surface in Search Console.
+[[redirects]]
+  from = "/infraredsauna"
+  to = "/wellness/far-infrared-sauna/"
+  status = 301
+
+[[redirects]]
+  from = "/nervous-system-trainer"
+  to = "/wellness/nervous-system-trainer/"
+  status = 301
+
+[[redirects]]
+  from = "/pemf"
+  to = "/wellness/pemf/"
+  status = 301
+
+[[redirects]]
+  from = "/getwell-massage"
+  to = "/wellness/get-well-massage/"
+  status = 301
+
+[[redirects]]
+  from = "/mindthetruth"
+  to = "/mind-the-truth/"
+  status = 301
+
+[[redirects]]
+  from = "/team"
+  to = "/about/"
+  status = 301
