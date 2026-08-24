@@ -5,10 +5,35 @@ script, and the mobile menu markup the React sheet used to render.
 
 Idempotent — safe to re-run after rebuilding pages.
 """
+import os
 import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def analytics_tag() -> str:
+    """The GA4 script tag — emitted only for Netlify production builds.
+
+    Two conditions, both required:
+      GA_MEASUREMENT_ID   set in Netlify's environment variables
+      CONTEXT=production  set by Netlify itself, per deploy context
+
+    Gating on CONTEXT means deploy previews and branch builds never receive the
+    tag at all, rather than receiving it and relying on a runtime check. This
+    workflow produces a preview per pull request, so without that gate the real
+    numbers would fill up with our own review traffic.
+
+    js/analytics.js keeps a hostname guard anyway, as a second line of defence
+    for local builds or a mis-set context.
+    """
+    gid = os.environ.get("GA_MEASUREMENT_ID", "").strip()
+    if not gid:
+        return ""
+    if os.environ.get("CONTEXT", "").strip() != "production":
+        return ""
+    return f'<script src="/js/analytics.js" data-ga-id="{gid}" defer></script>'
+
 
 NAV = [
     ("01", "/start-here/", "Start Here", False),
@@ -73,6 +98,13 @@ def patch(path: Path) -> bool:
     # mobile menu markup + script, just before </body>
     if 'id="mobile-menu"' not in html:
         html = html.replace("</body>", menu_markup() + '<script src="/js/site.js"></script></body>', 1)
+
+    # GA4, production builds only. Idempotent: a rebuild neither duplicates the
+    # tag nor leaves a stale one behind if the environment variable is removed.
+    html = re.sub(r'<script src="/js/analytics\.js"[^>]*></script>', "", html)
+    tag = analytics_tag()
+    if tag:
+        html = html.replace("</body>", tag + "</body>", 1)
 
     # The menu trigger needs to point at the panel. Guard on the attribute
     # already being present rather than de-duplicating afterwards: the previous
