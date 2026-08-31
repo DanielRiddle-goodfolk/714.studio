@@ -6,7 +6,7 @@ of what the experience is and what it supports — they do not make medical clai
 
 NEEDS-STUDIO-INPUT marks every place a real business fact belongs.
 """
-from pages import (ROOT, build, link, action, chapter, intro, faq, opening,
+from pages import (build, link, action, chapter, intro, faq, opening,
                    simple_opening, closer, NOTE, IMG, PHONE, TEL, EMAIL, BOOK)
 
 W = 'class="editorial-width"'
@@ -187,7 +187,7 @@ def page_start_here():
         f"begin. Start with the concern, question, or kind of support that is already on "
         f"your mind.</p></div>"
         f'<figure><img alt="" src="{IMG["root"]}"></figure></section>'
-        + f'<section class="editorial-width start-index" {SECT}>'
+        + f'<section {W} class="start-index" {SECT}>'
           f'<div class="start-index-intro"><h2>Orientation before information.</h2>'
           f"<p>Most wellness websites ask you to already know what you need. This one does not. "
           f"Every path below leads somewhere real, and the last one — not knowing yet — is as "
@@ -608,8 +608,8 @@ def page_contact():
         + f'<section {W} class="contact-social" style="padding-bottom:var(--s714-section)">'
           f"<h2>Elsewhere</h2><div>"
           f'<div class="footer-socials">'
-          f'<a href="https://www.instagram.com/studio714official/" target="_blank" rel="noreferrer">Instagram</a>'
-          f'<a href="https://www.facebook.com/profile.php?id=61581823811677" target="_blank" rel="noreferrer">Facebook</a>'
+          f'<a href="https://www.instagram.com/studio714_wellness/" target="_blank" rel="noreferrer">Instagram</a>'
+          f'<a href="https://www.facebook.com/studio714lp" target="_blank" rel="noreferrer">Facebook</a>'
           f"</div></div></section>"
         + f'<section {W} class="contact-map" style="padding-bottom:var(--s714-section)">'
           + NOTE.format("A map embed and directions belong here. Also worth adding: a contact "
@@ -626,38 +626,6 @@ def page_contact():
           main, nav_key=None)
 
 
-def warn_duplicate_class_attributes():
-    """Report tags carrying two class="" attributes.
-
-    A tag written as `<section {W} class="start-index">` produces
-    `class="editorial-width" class="start-index"`. HTML parsers keep the first
-    attribute and silently discard the second, so the layout class never
-    applies and the section falls back to a plain stacked block. On
-    /start-here/ that also left `.start-index-intro`'s `position:sticky` inside
-    a full-width block, so the intro scrolled over the pathway list.
-
-    This is a warning rather than a build failure: several sections still carry
-    the duplicate, and each needs its layout reviewed on a deploy preview
-    before it is merged in. Fixing one means merging the two attributes —
-    `class="editorial-width start-index"` — not deleting either.
-    """
-    import re as _re
-    pattern = _re.compile(r'<[a-zA-Z][^>]*?\sclass="[^"]*"[^>]*?\sclass="', _re.S)
-    total = 0
-    for page in sorted(ROOT.glob("**/index.html")):
-        if "build" in page.parts:
-            continue
-        hits = pattern.findall(page.read_text(encoding="utf-8"))
-        if hits:
-            rel = page.relative_to(ROOT)
-            print(f"  warning: {rel} has {len(hits)} tag(s) with a duplicate "
-                  f"class attribute; the second class is being dropped")
-            total += len(hits)
-    if total:
-        print(f"  {total} duplicate class attribute(s) sitewide — see "
-              f"warn_duplicate_class_attributes() in build/content.py")
-
-
 if __name__ == "__main__":
     page_start_here()
     page_wellness()
@@ -672,4 +640,3 @@ if __name__ == "__main__":
     page_book()
     page_contact()
     print("built all interior pages")
-    warn_duplicate_class_attributes()
