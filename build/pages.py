@@ -57,6 +57,7 @@ IMG = {
     "boots":     "/images/studio714_compression_boots.svg",
     "root":      "/images/studio714_root_system_v2_15159731.svg",
     "l_apoth":   "/images/logo_apothecary_554918b9.svg",
+    "l_goodfolk":"/images/logo_goodfolk_family_71e36e80.svg",
     "l_mind":    "/images/logo_mind_the_truth_1f88ac61.svg",
     "l_massage": "/images/logo_get_well_massage_343812ef.svg",
     "l_reclaim": "/images/logo_reclaim_health_spa_09abc004.svg",
