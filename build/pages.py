@@ -66,10 +66,10 @@ ARROW = ('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox
          'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
          'stroke-linejoin="round" class="lucide lucide-arrow-right" aria-hidden="true">'
          '<path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>')
-ARROW_UR = ('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" '
-            'fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" '
-            'stroke-linejoin="round" class="lucide lucide-arrow-up-right" aria-hidden="true">'
-            '<path d="M7 7h10v10"></path><path d="M7 17 17 7"></path></svg>')
+# External links get the same arrow as internal ones. The up-right "leaves the
+# site" variant was removed at Will's request — see strip_external_icons in
+# build/inject.py, which also cleans the committed home page.
+ARROW_UR = ARROW
 
 
 # ---------------------------------------------------------------- helpers
