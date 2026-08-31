@@ -2,6 +2,10 @@
 
 Read this before editing anything in this repo.
 
+Two rules are absolute: **never invent business facts**, and **never commit to
+`main`** — every change opens a branch and a pull request. Both are spelled out
+below.
+
 ## What this is
 
 A static site for Studio 7:14, a faith-rooted whole-person wellness studio at
@@ -129,10 +133,29 @@ build. Don't reintroduce cached copies of things that can be derived.
 
 ---
 
-## Workflow
+## Workflow — every edit goes through a branch
 
-Branch → pull request → Netlify deploy preview → human approval → **squash
-merge**. Nothing reaches `main` directly; GitHub enforces this.
+**Never commit to `main`.** No direct pushes, no API writes to `main`, no
+"quick fix" on the default branch. This applies to every change without
+exception: one-line fixes, typo corrections, documentation, and this file
+itself. A change that seems too small to branch for is exactly the kind that
+gets merged without a deploy preview and breaks a page.
+
+Every edit follows the same path:
+
+1. **Branch off `main`** — name it for the change (`fix/…`, `content/…`,
+   `build/…`).
+2. **Commit to that branch only.**
+3. **Open a pull request** against `main`, describing what changed and which
+   pages it affects.
+4. **Check the Netlify deploy preview** — open the affected pages on it, don't
+   just confirm the build went green.
+5. **Human approval**, then **squash merge**.
+
+Write access to `main` is not permission to use it — GitHub enforces the rule,
+but the rule stands whether or not the enforcement is in place at that moment.
+If creating a branch or opening a pull request fails, stop and say so; do not
+fall back to committing on `main`.
 
 Required approvals stays at **zero** — GitHub won't let someone approve their
 own pull request, so requiring one would lock a solo owner out. The build check
