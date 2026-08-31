@@ -12,6 +12,30 @@ from pages import (ROOT, build, link, action, chapter, intro, faq, opening,
 W = 'class="editorial-width"'
 SECT = 'style="padding-block:var(--s714-section)"'
 
+
+def split_intro(label, heading, body):
+    """Two children for the .../heading | copy two-column sections.
+
+    Several sections in studio714.css are two-column grids that address their
+    children positionally — `.membership-why h2` for the left column and
+    `.membership-why > div:last-child` for the right. A single .section-intro
+    div fills only the left column and leaves the right one empty, so those
+    sections need the heading and the copy as separate children.
+    """
+    lead = f'<p class="utility-label">{label}</p>' if label else ""
+    return f"<div>{lead}<h2>{heading}</h2></div><div><p>{body}</p></div>"
+
+
+def band(cls, inner, width="editorial-width"):
+    """A full-bleed background band with its content held to a width.
+
+    Bands carry a background and border-block, so they must run edge to edge;
+    the width class belongs on a child. Putting .editorial-width on the band
+    itself insets the colour and pushes the copy flush against its own edge.
+    """
+    return f'<section class="{cls}"><div class="{width}">{inner}</div></section>'
+
+
 # ---------------------------------------------------------------- modalities
 
 MODALITIES = [
@@ -220,7 +244,7 @@ def page_wellness():
         f"renewal — each modality speaking a different physiological language.</p></div>"
         f'<figure><img alt="" src="{IMG["chamber"]}">'
         f"<figcaption>Placeholder image · final photography to come</figcaption></figure></section>"
-        + f'<section {W} class="wellness-principle"><blockquote>Support that works with the '
+        + f'<section class="editorial-width wellness-principle"><blockquote>Support that works with the '
           f"body's own design.</blockquote><p>The work is not to override the body but to give "
           f"it conditions it can use. That means the right support, in the right rhythm, for "
           f"the person actually in the room.</p></section>"
@@ -242,8 +266,9 @@ def page_wellness():
 
 def page_chamber():
     grid = "".join(
-        f'<div class="chamber-modality-grid"><h3 class="chamber-modality-heading">{n}</h3>'
-        f"<p>{d}</p></div>" for n, d in CHAMBER_MODALITIES)
+        f'<article><div class="chamber-modality-heading"><span>{i + 1:02d}</span>'
+        f"<h2>{n}</h2></div><p>{d}</p></article>"
+        for i, (n, d) in enumerate(CHAMBER_MODALITIES))
     main = (
         f'<section class="page-opening chamber-opening"><div class="chamber-opening-copy" '
         f'style="padding:clamp(3.5rem,8vw,7.5rem) var(--s714-gutter);align-self:center">'
@@ -251,19 +276,20 @@ def page_chamber():
         f"Happening together.</p></div>"
         f'<figure><img alt="Full-Spectrum Wellness Chamber" src="{IMG["chamber"]}">'
         f"<figcaption>Commissioned concept image · placeholder</figcaption></figure></section>"
-        + f'<section {W} class="chamber-what" {SECT}>'
-          f'<p class="chamber-statement">Red Light, Near-Infrared, Mid-Infrared, Far-Infrared, '
-          f"Halotherapy, Aromatherapy, Healing Hertz Sound, Guided Breathing, and Movement "
-          f"belong to one carefully considered environment. <em>The integration is the point.</em></p>"
-          f"</section>"
+        + f'<section class="editorial-width chamber-what" {SECT}>'
+          f"<p>Red Light, Near-Infrared, Mid-Infrared, Far-Infrared, Halotherapy, "
+          f"Aromatherapy, Healing Hertz Sound, Guided Breathing, and Movement belong to one "
+          f"carefully considered environment.</p>"
+          f"<blockquote>The integration is the point.</blockquote></section>"
         + f'<section {W} style="padding-bottom:var(--s714-section)"><div class="chamber-modalities">'
           f'{intro("Nine mechanisms", "What is happening in the room.", "Each does something different. Together they cover surface, depth, air, breath, sound, and movement in a single session.")}'
-          f"{grid}</div></section>"
+          f'<div class="chamber-modality-grid">{grid}</div></div></section>'
         + f'<section {W} style="padding-bottom:var(--s714-section)">'
-          f'<div class="chamber-superpower"><h2>Why together rather than separately?</h2>'
+          f"<div><h2>Why together rather than separately?</h2>"
           f"<p>Because the body does not experience warmth, light, air, and breath as separate "
-          f"appointments. Sequencing them into one environment means the effects meet each "
-          f"other rather than being spread across a week.</p></div></section>"
+          f"appointments.</p>"
+          f'<p class="chamber-superpower">Sequencing them into one environment means the '
+          f"effects meet each other rather than being spread across a week.</p></div></section>"
         + f'<section {W} style="padding-bottom:var(--s714-section)">'
           f'<div class="chamber-practical">{intro("Practical", "Session length, pricing, and availability.", "The chamber is the Studio&rsquo;s flagship experience and its scheduling is handled directly.")}'
           + NOTE.format("Session length, pricing, contraindications, and what to bring all need "
@@ -289,29 +315,33 @@ def page_mind_the_truth():
         f"<p>A scripturally grounded, prayer-based space for individuals, couples, and families "
         f"walking through life's hardest seasons.</p></div>"
         f'<figure><img alt="" src="{IMG["root"]}"></figure></section>'
-        + f'<section {W} class="mind-scripture" {SECT}>'
-          f'<blockquote class="chamber-statement">&ldquo;He heals the brokenhearted and binds up '
-          f"their wounds.&rdquo;<br><em>Psalm 147:3</em></blockquote></section>"
-        + f'<section {W} class="mind-for" style="padding-bottom:var(--s714-section)">'
+        + band("mind-scripture",
+               "<blockquote>&ldquo;He heals the brokenhearted and binds up their "
+               "wounds.&rdquo;</blockquote><cite>Psalm 147:3</cite>",
+               width="content-width")
+        + f'<section class="editorial-width mind-for" style="padding-bottom:var(--s714-section)">'
           f'{intro("Who this is for", "Individuals, couples, and families.", "Counsel here is offered for ordinary hard seasons as well as acute ones.")}'
           f'<div class="mind-for-index">'
-          f"<div><h3>Individuals</h3><p>Grief, anxiety, discouragement, life transitions, and "
-          f"questions of direction and identity.</p></div>"
-          f"<div><h3>Couples</h3><p>Conflict, distance, rebuilding trust, and marriage coaching "
-          f"for couples at any stage.</p></div>"
-          f"<div><h3>Families</h3><p>Parenting through difficulty, seasons of change, and "
-          f"restoring communication within a household.</p></div></div></section>"
-        + f'<section {W} class="mind-foundation" style="padding-bottom:var(--s714-section)">'
-          f"<h2>The foundation.</h2><p>Mind the Truth&reg; is explicitly biblical counseling. "
-          f"Scripture and prayer are not an add-on to the work — they are the ground it stands "
-          f"on. People of any background are welcome, and no one is asked to pretend to a faith "
-          f"they do not hold.</p></section>"
-        + f'<section {W} class="mind-session" style="padding-bottom:var(--s714-section)">'
-          f'<div class="mind-session-inner">{intro("What a session looks like", "Unhurried, confidential, and directed by you.", "Sessions begin with listening. Where the conversation goes from there follows what you bring.")}'
-          + NOTE.format("Session length, frequency, fees, counselor credentials, and any "
-                        "sliding-scale or church-referral arrangements need Studio confirmation.")
-          + "</div></section>"
-        + f'<section {W} class="mind-notice" style="padding-bottom:var(--s714-section)">'
+          f"<p>Individuals &mdash; grief, anxiety, discouragement, life transitions, and "
+          f"questions of direction and identity.</p>"
+          f"<p>Couples &mdash; conflict, distance, rebuilding trust, and marriage coaching "
+          f"for couples at any stage.</p>"
+          f"<p>Families &mdash; parenting through difficulty, seasons of change, and "
+          f"restoring communication within a household.</p></div></section>"
+        + f'<section class="editorial-width mind-foundation">'
+          + split_intro(None, "The foundation.",
+                        "Mind the Truth&reg; is explicitly biblical counseling. Scripture and "
+                        "prayer are not an add-on to the work — they are the ground it stands "
+                        "on. People of any background are welcome, and no one is asked to "
+                        "pretend to a faith they do not hold.")
+          + "</section>"
+        + band("mind-session",
+               f'<div class="mind-session-inner">{intro("What a session looks like", "Unhurried, confidential, and directed by you.", "Sessions begin with listening. Where the conversation goes from there follows what you bring.")}'
+               + NOTE.format("Session length, frequency, fees, counselor credentials, and any "
+                             "sliding-scale or church-referral arrangements need Studio "
+                             "confirmation.")
+               + "</div>")
+        + f'<section class="editorial-width mind-notice" style="padding-bottom:var(--s714-section)">'
           f"<p><strong>Please note:</strong> biblical counseling at Studio 7:14 is pastoral and "
           f"spiritual care. It is not psychotherapy, psychiatric treatment, or a substitute for "
           f"licensed mental-health or medical care. If you are in crisis, please contact a "
@@ -346,7 +376,7 @@ def page_classes_events():
         + f'<section {W} {SECT}><div class="event-directory">'
           f'{intro("What we gather for", "Movement is a practice, not a performance.", "Classes are open to a wide range of ability. You do not need to arrive already fit.")}'
           f"{rows}</div></section>"
-        + f'<section {W} class="event-when" style="padding-bottom:var(--s714-section)">'
+        + f'<section class="editorial-width event-when" style="padding-bottom:var(--s714-section)">'
           f"<h2>Schedule</h2>"
           + NOTE.format("The live class schedule, instructor names, drop-in and package pricing, "
                         "and registration links all need to come from the Studio. This page "
@@ -369,22 +399,28 @@ def page_membership():
         f'<p class="utility-label">Membership</p>'
         f"<h1>Wellness that becomes part of your life.</h1>"
         f"<p>Some support works best as a rhythm rather than a single event.</p></div></section>"
-        + f'<section {W} class="membership-why" {SECT}>'
-          f'{intro("Why membership", "Rhythm beats intensity.", "Most of what happens here compounds. A sauna session is pleasant; a sauna habit changes how a season feels. Membership exists for people who want the Studio woven into ordinary life rather than saved for emergencies.")}'
-          f"</section>"
-        + f'<section {W} class="membership-options" style="padding-bottom:var(--s714-section)">'
-          f"<h2>Current options.</h2>"
-          + NOTE.format("Tier names, what each includes, pricing, guest privileges, freeze and "
-                        "cancellation terms, and any founding-member offer need to come from the "
-                        "Studio. The home page's own line — that options and pricing are "
-                        "confirmed directly rather than guessed — is the right stance until "
-                        "those are set.")
-          + f'<div class="opening-actions">{action(TEL, "Call about membership", "ink")}'
-            f'{link("/contact/", "Request the details")}</div></section>'
-        + f'<section {W} class="membership-value" style="padding-bottom:var(--s714-section)">'
-          f'{intro("What members tend to use", "The everyday half of the Studio.", "Sauna, the Chair, PEMF, classes, and the Apothecary are the pieces that reward regular use most.")}'
-          f"</section>"
-        + f'<section {W} class="membership-faq" style="padding-bottom:var(--s714-section)">'
+        + f'<section class="editorial-width membership-why">'
+          + split_intro("Why membership", "Rhythm beats intensity.",
+                        "Most of what happens here compounds. A sauna session is pleasant; a "
+                        "sauna habit changes how a season feels. Membership exists for people "
+                        "who want the Studio woven into ordinary life rather than saved for "
+                        "emergencies.")
+          + "</section>"
+        + band("membership-options",
+               "<h2>Current options.</h2>"
+               + NOTE.format("Tier names, what each includes, pricing, guest privileges, "
+                             "freeze and cancellation terms, and any founding-member offer need "
+                             "to come from the Studio. The home page's own line — that options "
+                             "and pricing are confirmed directly rather than guessed — is the "
+                             "right stance until those are set.")
+               + f'<div class="opening-actions">{action(TEL, "Call about membership", "ink")}'
+                 f'{link("/contact/", "Request the details")}</div>')
+        + f'<section class="editorial-width membership-value">'
+          + split_intro("What members tend to use", "The everyday half of the Studio.",
+                        "Sauna, the Chair, PEMF, classes, and the Apothecary are the pieces "
+                        "that reward regular use most.")
+          + "</section>"
+        + f'<section class="editorial-width membership-faq" style="padding-bottom:var(--s714-section)">'
           f"<h2>Questions</h2>"
           + faq([
               ("Do I need a membership to visit?",
@@ -414,9 +450,10 @@ def page_apothecary_consultation():
         ("03", "Selection", "Specific, guided choices from the Apothecary rather than a shelf to guess at."),
         ("04", "Follow-up", "What to watch for, and when to revisit."),
     ]
+    # .consultation-format-steps is one grid of bordered <article> cells, two up.
+    # Repeating the class on every step made four competing grid containers.
     rows = "".join(
-        f'<div class="consultation-format-steps"><span class="modality-index-number">{n}</span>'
-        f'<h3 class="consultation-format-heading">{t}</h3><p>{d}</p></div>'
+        f"<article><span>{n}</span><h3>{t}</h3><p>{d}</p></article>"
         for n, t, d in steps)
     main = (
         f'<section class="page-opening consultation-opening"><div class="consultation-opening-copy" '
@@ -426,26 +463,34 @@ def page_apothecary_consultation():
         f"inputs, thoughtful education, and personal guidance.</p></div>"
         f'<figure><img alt="" src="{IMG["hands"]}">'
         f"<figcaption>Placeholder image · final photography to come</figcaption></figure></section>"
-        + f'<section {W} class="consultation-intro" {SECT}>'
-          f'{intro("Why a consultation", "A shelf is not a plan.", "The Apothecary holds therapeutic herbs, teas, tinctures, essential oils, and nutraceuticals. Knowing which of them belongs in your life is a different question from knowing what is on the shelf — and it is the one worth asking first.")}'
-          f"</section>"
-        + f'<section {W} class="consultation-format" style="padding-bottom:var(--s714-section)">'
-          f"<h2>How a consultation runs.</h2>{rows}</section>"
-        + f'<section {W} class="consultation-who" style="padding-bottom:var(--s714-section)">'
-          f'<div class="consultation-who-index">'
-          f'{intro("Who it suits", "People who want to be taught, not sold to.", "The goal is that you leave understanding your own choices well enough to make the next one without us.")}'
-          f"</div></section>"
-        + f'<section {W} class="consultation-practical" style="padding-bottom:var(--s714-section)">'
-          f"<h2>Practical</h2>"
+        + f'<section class="editorial-width consultation-intro">'
+          + split_intro("Why a consultation", "A shelf is not a plan.",
+                        "The Apothecary holds therapeutic herbs, teas, tinctures, essential "
+                        "oils, and nutraceuticals. Knowing which of them belongs in your life "
+                        "is a different question from knowing what is on the shelf — and it is "
+                        "the one worth asking first.")
+          + "</section>"
+        + f'<section class="editorial-width consultation-format">'
+          f"<div><h2>How a consultation runs.</h2></div>"
+          f'<div class="consultation-format-steps">{rows}</div></section>'
+        + band("consultation-who",
+               intro("Who it suits", "People who want to be taught, not sold to.",
+                     "The goal is that you leave understanding your own choices well enough to "
+                     "make the next one without us."))
+        + f'<section {W} style="padding-block:var(--s714-section) 1.5rem"><h2>Practical</h2></section>'
+        + f'<section class="editorial-width consultation-practical" style="margin-bottom:var(--s714-section)">'
+          + f"<article><h3>Length and fee</h3>"
           + NOTE.format("Consultation length, fee, whether it is credited toward purchases, and "
                         "the consultant's credentials need Studio confirmation.")
-          + f"<p><strong>Please note:</strong> Apothecary guidance is educational and "
-            f"nutritional in nature. It is not medical advice, diagnosis, or treatment, and it "
-            f"does not replace care from your physician — particularly if you are pregnant, "
-            f"nursing, managing a diagnosed condition, or taking prescription medication. Bring "
-            f"your medication list so interactions can be considered.</p>"
-          + f'<div class="opening-actions">{action(BOOK + "/apothecary", "Visit the Apothecary", "ink", external=True)}'
-            f'{link(TEL, "Book a consultation")}</div></section>'
+          + "</article>"
+          + f"<article><h3>Scope</h3><p>Apothecary guidance is educational and nutritional in "
+            f"nature. It is not medical advice, diagnosis, or treatment, and it does not "
+            f"replace care from your physician — particularly if you are pregnant, nursing, "
+            f"managing a diagnosed condition, or taking prescription medication. Bring your "
+            f"medication list so interactions can be considered.</p></article>"
+          + f"<article><h3>Booking</h3>"
+            f'<div class="opening-actions">{action(BOOK + "/apothecary", "Visit the Apothecary", "ink", external=True)}'
+            f'{link(TEL, "Book a consultation")}</div></article></section>'
         + closer("Not sure it is what you need?",
                  "Say what is going on and we will tell you honestly whether the Apothecary is "
                  "the right door — or whether something else here is.",
@@ -463,9 +508,14 @@ def page_about():
         ("Hospitality", "A place that receives people well, whether they book or simply walk in."),
         ("Biblical truth", "Scripture is not decoration here. It is the frame the rest sits inside."),
     ]
+    # .foundation-plates in studio714.css styles its rows as `p > span + text`:
+    # the span is the small apple-coloured number in a 2.2rem column, the bare
+    # text node fills the rest. Any element around that text (a span, a strong)
+    # becomes a second grid item and lands back in the number column, which is
+    # what was squeezing the copy to one word per line.
     rows = "".join(
-        f'<div class="value-index"><h3 class="value-heading">{t}</h3><p>{d}</p></div>'
-        for t, d in values)
+        f"<p><span>{i + 1:02d}</span>{t} — {d}</p>"
+        for i, (t, d) in enumerate(values))
     main = (
         f'<section class="page-opening about-opening"><div class="about-opening-copy" '
         f'style="padding:clamp(3.5rem,8vw,7.5rem) var(--s714-gutter);align-self:center">'
@@ -473,32 +523,38 @@ def page_about():
         f"<p>Studio 7:14 gathers whole-person wellness, the GoodFolk family, education, "
         f"movement, counsel, and hospitality at one La Porte address.</p></div>"
         f'<figure><img alt="" src="{IMG["hero"]}"></figure></section>'
-        + f'<section {W} class="about-philosophy" {SECT}>'
-          f'{intro("The conviction underneath", "The body is an integrated design.", "Not a collection of unrelated parts to be routed to unrelated specialists. Studio 7:14 brings science, nature, hospitality, movement, education, prayer, and biblical truth beneath one roof because that is how a person actually arrives — whole, and all at once.")}'
-          f"</section>"
-        + f'<section {W} class="foundations-section" style="padding-bottom:var(--s714-section)">'
-          f"<h2>Four foundations.</h2>"
+        + band("about-philosophy",
+               intro("The conviction underneath", "The body is an integrated design.",
+                     "Not a collection of unrelated parts to be routed to unrelated "
+                     "specialists. Studio 7:14 brings science, nature, hospitality, movement, "
+                     "education, prayer, and biblical truth beneath one roof because that is "
+                     "how a person actually arrives — whole, and all at once."))
+        + f'<section class="editorial-width foundations-section">'
+          f"<div><h2>Four foundations.</h2></div>"
           f'<div class="foundation-plates">{rows}</div></section>'
-        + f'<section {W} class="why-714" style="padding-bottom:var(--s714-section)">'
+        + f'<section class="editorial-width why-714" style="padding-bottom:var(--s714-section)">'
           f"<h2>Why 7:14?</h2>"
           + NOTE.format("The story behind the name — the scripture reference and the street "
                         "address at 714 Lincoln Way — should be told in the Studio's own words. "
                         "This is one of the most-read paragraphs on any site like this.")
           + "</section>"
-        + f'<section {W} class="goodfolk-about" style="padding-bottom:var(--s714-section)">'
-          f'{intro("One family · nine ways in", "The GoodFolk family.", "Reclaim Health Spa, Get Well Massage, The Apothecary, Mind the Truth®, and Turnaround Lifestyle. Each keeps its own voice and purpose; the shared thread is thoughtful care for the whole person.")}'
-          f"</section>"
-        + f'<section {W} class="team-section" style="padding-bottom:var(--s714-section)">'
-          f"<h2>The team</h2>"
-          + NOTE.format("Names, roles, credentials, and short bios for the practitioners. The "
-                        "current Squarespace site has a Team page — its content should be "
-                        "carried over and updated rather than rewritten from scratch.")
-          + "</section>"
-        + f'<section {W} class="about-visit" style="padding-bottom:var(--s714-section)">'
+        + f'<section class="editorial-width goodfolk-about">'
+          f'<div>{intro("One family · nine ways in", "The GoodFolk family.", "Reclaim Health Spa, Get Well Massage, The Apothecary, Mind the Truth®, and Turnaround Lifestyle. Each keeps its own voice and purpose; the shared thread is thoughtful care for the whole person.")}</div>'
+          f'<img alt="" src="{IMG["l_goodfolk"]}"></section>'
+        + band("team-section",
+               "<h2>The team</h2>"
+               + NOTE.format("Names, roles, credentials, and short bios for the practitioners. "
+                             "The current Squarespace site has a Team page — its content should "
+                             "be carried over and updated rather than rewritten from scratch."))
+        + f'<section class="editorial-width about-visit" style="margin-block:var(--s714-section)">'
+          f"<div><h2>Come and see.</h2>"
           f'<div class="visit-details"><p><span>714 Lincoln Way<br>La Porte, Indiana</span></p>'
-          f"<p><span>7:00 AM–7:00 PM<br>Seven days a week</span></p></div>"
+          f"<p><span>7:00 AM–7:00 PM<br>Seven days a week</span></p></div></div>"
+          f'<div><a href="{TEL}">{PHONE}</a><a href="mailto:{EMAIL}">{EMAIL}</a>'
+          f"<p>Walk-ins are welcome during open hours. Appointments are recommended for "
+          f"services, consultations, counseling, and classes.</p>"
           f'<div class="opening-actions">{action("/book/", "Book a visit", "ink")}'
-          f'{link("/contact/", "Contact the Studio")}</div></section>'
+          f'{link("/contact/", "Contact the Studio")}</div></div></section>'
     )
     build("/about", "About — Studio 7:14",
           "A faith-rooted whole-person wellness house in La Porte, Indiana.",
@@ -509,14 +565,14 @@ def page_first_visit():
     main = (
         simple_opening("First visit", "What to expect.",
                        "No one should have to guess how a place works before walking into it.")
-        + f'<section {W} class="first-visit-intro">'
+        + f'<section class="editorial-width first-visit-intro">'
           f"<h2>The short version.</h2>"
           f"<div><p>Arrive a few minutes early. Wear something comfortable. Tell whoever greets "
           f"you that it is your first time — that single sentence changes the whole visit, "
           f"because it means someone walks you through the building rather than assuming you "
           f"know it.</p><p>Walk-ins are welcome during open hours. Appointments are recommended "
           f"for services, consultations, counseling, and classes.</p></div></section>"
-        + f'<section {W} class="first-visit-faq">'
+        + f'<section class="editorial-width first-visit-faq">'
           f"<h2 style=\"margin-bottom:1.5rem\">Questions people actually ask.</h2>"
           + faq([
               ("Do I need an appointment?",
@@ -563,9 +619,12 @@ def page_book():
         ("Mind the Truth®", "Biblical counseling for individuals, couples, and families.", "/mind-the-truth/", False),
         ("Classes &amp; events", "Rebounding, fitness fusion, breath training, and gatherings.", "/classes-events/", False),
     ]
+    # .booking-paths styles its own direct <a> children — number span, copy, arrow
+    # — and sizes the title as an h2. Wrapping these in .start-pathways borrowed
+    # the Start Here row instead, which is a different, tighter rhythm.
     rows = "".join(
-        f'<a class="start-pathway" href="{h}"{" target=_blank rel=noreferrer" if e else ""}>'
-        f'<span class="start-path-number">{i+1:02d}</span><div><h3>{t}</h3><p>{d}</p></div>'
+        f'<a href="{h}"{" target=_blank rel=noreferrer" if e else ""}>'
+        f'<span>{i+1:02d}</span><div><h2>{t}</h2><p>{d}</p></div>'
         f'<span aria-hidden="true">{"↗" if e else "→"}</span></a>'
         for i, (t, d, h, e) in enumerate(paths))
     main = (
@@ -573,14 +632,15 @@ def page_book():
         f'<p class="utility-label">Booking</p><h1>Book a visit.</h1>'
         f"<p>Choose the kind of support you are after. Each path leads to the right place to "
         f"schedule it.</p></div></section>"
-        + f'<section {W} class="booking-paths" {SECT}>'
-          f'<div class="start-pathways">{rows}</div></section>'
-        + f'<section {W} class="external-system-note" style="padding-bottom:var(--s714-section)">'
+        + f'<section class="editorial-width booking-paths" {SECT}>{rows}</section>'
+        + f'<section {W} style="padding-bottom:var(--s714-section)">'
+          f'<div class="external-system-note">'
           + NOTE.format("Booking currently runs through the existing Squarespace scheduling at "
                         "714.studio. Decide whether to keep that, embed it per service page, or "
-                        "move to a dedicated platform — this affects every Book button on the site.")
-          + "</section>"
-        + f'<section {W} class="booking-help" style="padding-bottom:var(--s714-section)">'
+                        "move to a dedicated platform — this affects every Book button on the "
+                        "site.")
+          + "</div></section>"
+        + f'<section class="editorial-width booking-help" style="padding-bottom:var(--s714-section)">'
           f"<h2>Rather just talk to someone?</h2>"
           f"<div><p>Call the Studio and a person will help you find the right appointment. "
           f"Walk-ins are welcome during open hours, seven days a week, 7:00 AM–7:00 PM.</p>"
@@ -598,20 +658,24 @@ def page_contact():
         f'<p class="utility-label">Contact</p><h1>Come and see.</h1>'
         f"<p>Walk-ins welcome. Appointments recommended for services, consultations, "
         f"counseling, and classes.</p></div></section>"
-        + f'<section {W} class="contact-primary" {SECT}>'
-          f'<div class="contact-directory">'
-          f'<div><p class="utility-label">Visit</p><p>714 Lincoln Way<br>La Porte, Indiana</p></div>'
-          f'<div><p class="utility-label">Hours</p><p>7:00 AM–7:00 PM<br>Seven days a week</p></div>'
-          f'<div><p class="utility-label">Call</p><a href="{TEL}">{PHONE}</a></div>'
-          f'<div><p class="utility-label">Email</p><a href="mailto:{EMAIL}">{EMAIL}</a></div>'
-          f"</div></section>"
-        + f'<section {W} class="contact-social" style="padding-bottom:var(--s714-section)">'
-          f"<h2>Elsewhere</h2><div>"
-          f'<div class="footer-socials">'
+        # .contact-primary is itself the card grid — bordered <article> cells,
+        # two up at 760px and four at 1180px. The .contact-directory wrapper made
+        # it a one-cell grid, which is where the large empty bordered box came from.
+        + f'<section class="editorial-width contact-primary" '
+          f'style="margin-block:var(--s714-section)">'
+          f'<article><p class="utility-label">Visit</p>'
+          f"<h3>714 Lincoln Way<br>La Porte, Indiana</h3></article>"
+          f'<article><p class="utility-label">Hours</p>'
+          f"<h3>7:00 AM–7:00 PM<br>Seven days a week</h3></article>"
+          f'<article><p class="utility-label">Call</p><a href="{TEL}">{PHONE}</a></article>'
+          f'<article><p class="utility-label">Email</p>'
+          f'<a href="mailto:{EMAIL}">{EMAIL}</a></article></section>'
+        + f'<section class="editorial-width contact-social">'
+          f"<div><h2>Elsewhere</h2></div><div>"
           f'<a href="https://www.instagram.com/studio714_wellness/" target="_blank" rel="noreferrer">Instagram</a>'
           f'<a href="https://www.facebook.com/studio714lp" target="_blank" rel="noreferrer">Facebook</a>'
-          f"</div></div></section>"
-        + f'<section {W} class="contact-map" style="padding-bottom:var(--s714-section)">'
+          f"</div></section>"
+        + f'<section class="editorial-width contact-map" style="padding-bottom:var(--s714-section)">'
           + NOTE.format("A map embed and directions belong here. Also worth adding: a contact "
                         "form wired to Netlify Forms so enquiries are captured rather than "
                         "relying on someone remembering to check email.")
@@ -636,10 +700,11 @@ def warn_duplicate_class_attributes():
     /start-here/ that also left `.start-index-intro`'s `position:sticky` inside
     a full-width block, so the intro scrolled over the pathway list.
 
-    This is a warning rather than a build failure: several sections still carry
-    the duplicate, and each needs its layout reviewed on a deploy preview
-    before it is merged in. Fixing one means merging the two attributes —
-    `class="editorial-width start-index"` — not deleting either.
+    Every section has been fixed, so this should print nothing. It stays as a
+    regression guard: the mistake is easy to reintroduce, because `W` already
+    expands to a class attribute and `<section {W} class="…">` reads as though
+    it ought to work. The fix is always to merge the two into one attribute —
+    `class="editorial-width start-index"` — never to delete either.
     """
     import re as _re
     pattern = _re.compile(r'<[a-zA-Z][^>]*?\sclass="[^"]*"[^>]*?\sclass="', _re.S)
