@@ -130,28 +130,22 @@ body.menu-open { overflow: hidden; }
 .detail-booking p { max-width: var(--s714-reading); color: var(--s714-charcoal); }
 .detail-booking .opening-actions { margin-top: 1.5rem; }
 
-.chamber-modality-grid {
-  border-top: 1px solid color-mix(in srgb, var(--s714-ink) 22%, transparent);
-  padding-block: 1rem;
-}
+/* .chamber-modality-grid, .foundation-plates, .mind-for-index,
+   .contact-directory and .consultation-format-steps used to be re-implemented
+   here as simple auto-fit card grids. That was a workaround: the sections
+   holding them were written with two class attributes on one tag, so the layout
+   classes studio714.css defines for them were dropped by the parser and never
+   applied. With the markup fixed those sections use their own grids — bordered
+   article cells, numbered plate rows — and a second grid on top of them fought
+   the first. */
 
-.chamber-modality-grid p { margin: .3rem 0 0; color: var(--s714-charcoal); font-size: .92rem; }
+.chamber-modality-grid article .chamber-modality-heading h2 { margin-bottom: .5rem; }
 
-.foundation-plates,
-.mind-for-index,
-.contact-directory {
-  display: grid;
-  gap: 2rem;
-  margin-top: 2.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-}
-
-.consultation-format-steps {
-  border-top: 1px solid color-mix(in srgb, var(--s714-ink) 22%, transparent);
-  padding-block: 1.15rem;
-}
-
-.consultation-format-steps p { margin: .35rem 0 0; max-width: 38rem; color: var(--s714-charcoal); }
+/* Bands hold one block of copy, and .section-intro carries a trailing margin
+   meant for separating it from what follows. Inside a band there is nothing
+   following, so the colour ran on well past the last line. */
+.about-philosophy .section-intro,
+.consultation-who .section-intro { margin-bottom: 0; }
 
 .event-type-index {
   border-top: 1px solid var(--s714-ink);
@@ -160,9 +154,10 @@ body.menu-open { overflow: hidden; }
 
 .event-type-index p { margin: .4rem 0 0; max-width: 42rem; color: var(--s714-charcoal); }
 
+/* .mind-notice is itself a bordered box in studio714.css, so the paragraph
+   inside it only needs its type treatment — the border here drew a second box
+   inside the first. */
 .mind-notice p {
-  border: 1px solid color-mix(in srgb, var(--s714-ink) 30%, transparent);
-  padding: 1.25rem;
   max-width: var(--s714-reading);
   color: var(--s714-charcoal);
   font-family: var(--s714-font-utility);
