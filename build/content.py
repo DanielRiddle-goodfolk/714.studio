@@ -608,8 +608,8 @@ def page_contact():
         + f'<section {W} class="contact-social" style="padding-bottom:var(--s714-section)">'
           f"<h2>Elsewhere</h2><div>"
           f'<div class="footer-socials">'
-          f'<a href="https://www.instagram.com/studio714official/" target="_blank" rel="noreferrer">Instagram</a>'
-          f'<a href="https://www.facebook.com/profile.php?id=61581823811677" target="_blank" rel="noreferrer">Facebook</a>'
+          f'<a href="https://www.instagram.com/studio714_wellness/" target="_blank" rel="noreferrer">Instagram</a>'
+          f'<a href="https://www.facebook.com/studio714lp" target="_blank" rel="noreferrer">Facebook</a>'
           f"</div></div></section>"
         + f'<section {W} class="contact-map" style="padding-bottom:var(--s714-section)">'
           + NOTE.format("A map embed and directions belong here. Also worth adding: a contact "
