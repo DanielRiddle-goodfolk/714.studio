@@ -672,8 +672,8 @@ def page_contact():
           f'<a href="mailto:{EMAIL}">{EMAIL}</a></article></section>'
         + f'<section class="editorial-width contact-social">'
           f"<div><h2>Elsewhere</h2></div><div>"
-          f'<a href="https://www.instagram.com/studio714official/" target="_blank" rel="noreferrer">Instagram</a>'
-          f'<a href="https://www.facebook.com/profile.php?id=61581823811677" target="_blank" rel="noreferrer">Facebook</a>'
+          f'<a href="https://www.instagram.com/studio714_wellness/" target="_blank" rel="noreferrer">Instagram</a>'
+          f'<a href="https://www.facebook.com/studio714lp" target="_blank" rel="noreferrer">Facebook</a>'
           f"</div></section>"
         + f'<section class="editorial-width contact-map" style="padding-bottom:var(--s714-section)">'
           + NOTE.format("A map embed and directions belong here. Also worth adding: a contact "
