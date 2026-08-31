@@ -157,9 +157,17 @@ but the rule stands whether or not the enforcement is in place at that moment.
 If creating a branch or opening a pull request fails, stop and say so; do not
 fall back to committing on `main`.
 
-Required approvals stays at **zero** — GitHub won't let someone approve their
-own pull request, so requiring one would lock a solo owner out. The build check
-is the actual gate.
+Required approvals is **one**, and GitHub won't let anyone approve their own
+pull request. So a pull request opened through the API on the owner's behalf
+has to be approved by the other collaborator account, and vice versa. The
+Netlify deploy preview check must pass as well.
+
+The practical consequence: **an agent cannot merge its own work.** Claude opens
+the pull request, checks the deploy preview, and stops there. A human reviews
+and squash merges. Don't treat a green build as approval.
+
+(This was zero while the repo had a single owner, who would otherwise have been
+locked out of his own repo. It moved to one once there were two accounts.)
 
 **Never enable "Require signed commits."** It rejects everything created through
 the API and kills the workflow silently.
